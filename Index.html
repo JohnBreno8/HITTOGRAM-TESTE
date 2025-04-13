@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hittogram - teste</title>
+  <link rel="stylesheet" href="/scripts/estilos css/estilo-chat.css">
+  <link rel="icon" type="image/png" href="/mídias/favicon/anônimato e conexão com redes criptografadas para mensagens, fundo preto, detalhes em branco, estilo minimalista, logo de um símbolo.png.jpg">
+  <style>
+     /* Reset e configurações globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #121212;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* Container principal do chat */
+.chat-container {
+    width: 100%;
+    height: 100%;
+    max-width: 800px;
+    background-color: #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    background-image: url("/mídias /fundos /figgures /claro/e0283ea861dd8693b441dd42d769b441.jpg ");
+        background-size: 100%; /* Um pouco maior que o container para permitir movimento */
+}
+
+/* Cabeçalho do Chat */
+.chat-header {
+    background-color: #3333337A;
+    backdrop-filter: blur(8px); /* efeito borrado sutil */
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* Nome do chat */
+.chat-header p {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Área dos botões */
+.button-img {
+    display: flex;
+    align-items: center;
+}
+
+/* Estilizando os botões */
+.button-img button {
+    background: none;
+    border: 2px solid #C3C3C38C;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    padding: 5px;
+    transition: 0.3s;
+    backdrop-filter: blur(8px); /* efeito borrado sutil */
+}
+
+.button-img button:hover {
+    background-color: #FFFFFF00;
+}
+
+/* Ícones dentro dos botões */
+.button-img img {
+    width: 24px;
+    filter: brightness(0) invert(1);
+}
+
+/* Ajuste da imagem de perfil */
+#Perfiluser {
+    width: 45px; /* Aumenta o tamanho */
+    height: 45px;
+    border-radius: 50%;
+    border: 3px solid #B2B2B29E; /* Adiciona contorno branco */
+    margin-left: 15px;
+    background-color: #FFFFFF00;
+}
+
+/* Área do Chat (Mensagens) */
+.chat-box {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scroll-behavior: smooth;
+    margin-bottom: 65px; /* Espaço para a barra flutuante */
+}
+
+/* Estilizando mensagens */
+.message {
+    max-width: 75%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: #2C2C2C54;
+    color: white;
+    border-top-right-radius: 0;
+    backdrop-filter: blur(8px); /* Efeito de desfoque */
+}
+
+.bot-message {
+    align-self: flex-start;
+    background-color: #444;
+    color: white;
+    border-top-left-radius: 0;
+}
+
+/* Barra de entrada flutuante */
+.chat-input {
+    position: fixed;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 440px;
+    max-width: 800px;
+    display: flex;
+    align-items: center;
+    background-color: #33333378;
+    backdrop-filter: blur(8px); /* efeito borrado sutil */
+    padding: 10px;
+    border-radius: 15px;
+}
+
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #FFFFFF;
+    border-radius: 10px;
+    color: #DFFFFB;
+    font-size: 14px;
+    outline: none;
+    margin-right: 10px;
+    background-color: #53535375;
+    backdrop-filter: blur(8px); /* efeito borrado sutil */
+}
+
+/* Estilizando botões da barra de entrada */
+.chat-input button {
+    background: none;
+    border: 1px solid #CDCDCD94;
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 6px;
+    transition: 0.4s;
+    background-color: #00000000;
+    backdrop-filter: blur(5px); /* efeito borrado sutil */
+    margin-left: 3px;
+}
+
+/* Remove a margem do primeiro botão */
+.chat-input button:first-child {
+    margin-left: 0;
+} 
+
+.chat-input button:hover {
+    background-color: #FFFFFF17;
+    backdrop-filter: blur(30px); /* efeito borrado sutil */
+}
+
+.chat-input img {
+    width: 26px;
+    filter: brightness(0) invert(1);
+}
+
+/* Scrollbar customizada */
+.chat-box::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 5px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+    background: #222;
+}
+
+  </style>
+</head>
+
+<body>
+  <div id="charLimitAlert" class="char-limit-alert"></div>
+  <div class="chat-container">
+    <div class="chat-header">
+      <p>Hittogram teste view</p>
+      <div class="button-img">
+        <button onclick="voltar()">
+          <!-- Ícone Voltar -->
+          <svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button onclick="ligar()">
+          <!-- Ícone Telefone -->
+          <svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.77 19.77 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72 13.09 13.09 0 0 0 .57 2.57 2 2 0 0 1-.45 2.11L8.1 10.91a16 16 0 0 0 5 5l1.51-1.51a2 2 0 0 1 2.11-.45 13.09 13.09 0 0 0 2.57.57 2 2 0 0 1 1.71 2z"/></svg>
+        </button>
+        <button onclick="chamada()">
+          <!-- Ícone Vídeo -->
+          <svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        </button>
+        <svg id="Perfiluser" width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a8.38 8.38 0 0 1 13 0"/></svg>
+      </div>
+    </div>
+
+    <div class="chat-box" id="chatBox"></div>
+
+    <div class="chat-input">
+      <input type="text" id="messageInput" placeholder="Digite ..." onkeypress="handleKeyPress(event)">
+      <input type="file" id="fileInput" hidden>
+
+      <button onclick="sendMessage()">
+        <!-- Ícone Enviar -->
+        <svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-6 20-4-9-9-4 20-7z"/></svg>
+      </button>
+      <button onclick="selectFile()">
+        <!-- Ícone Arquivo -->
+        <svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </button>
+      <button onclick="toggleRecording(this)">
+        <!-- Ícone Microfone -->
+        <svg width="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1v22"/><path d="M5 8v2a7 7 0 0 0 14 0V8"/><rect x="9" y="2" width="6" height="11" rx="3"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <script>
+     // Selecionando elementos do DOM
+const chatBox = document.getElementById("chatBox");
+const messageInput = document.getElementById("messageInput");
+const fileInput = document.getElementById("fileInput");
+
+// Variável para controlar o tempo de toque longo
+let touchTimer = null;
+
+// Função para enviar mensagens de texto
+function sendMessage() {
+    const messageText = messageInput.value.trim();
+    if (messageText === "") return;
+
+    // Criando um elemento de mensagem do usuário
+    const messageElement = document.createElement("div");
+    messageElement.classList.add("message", "user-message");
+    messageElement.innerText = messageText;
+
+    // Adiciona funcionalidade de toque longo para apagar
+    addDeleteFeature(messageElement);
+
+    // Adicionando a mensagem ao chat
+    chatBox.appendChild(messageElement);
+
+    // Limpar campo de entrada
+    messageInput.value = "";
+
+    // Rolar para a última mensagem
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Função para abrir seletor de arquivo
+function selectFile() {
+    fileInput.click();
+}
+
+// Evento de mudança para exibir pré-visualização do arquivo
+fileInput.addEventListener("change", function () {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    const fileType = file.type.split("/")[0];
+
+    // Criando mensagem de arquivo
+    const fileMessage = document.createElement("div");
+    fileMessage.classList.add("message", "user-message");
+
+    if (fileType === "image") {
+        // Criar e exibir imagem
+        const imgElement = document.createElement("img");
+        imgElement.src = URL.createObjectURL(file);
+        imgElement.style.maxWidth = "250px";
+        imgElement.style.borderRadius = "5px";
+        imgElement.style.marginTop = "5px";
+        imgElement.style.cursor = "pointer";
+        
+        // Abrir imagem em nova aba ao clicar
+        imgElement.onclick = () => window.open(imgElement.src);
+
+        fileMessage.appendChild(imgElement);
+    } else if (fileType === "video") {
+        // Criar e exibir vídeo
+        const videoElement = document.createElement("video");
+        videoElement.src = URL.createObjectURL(file);
+        videoElement.controls = true;
+        videoElement.style.maxWidth = "250px";
+        videoElement.style.borderRadius = "5px";
+        videoElement.style.marginTop = "5px";
+
+        fileMessage.appendChild(videoElement);
+    } else {
+        // Criar link de download para outros arquivos
+        const fileLink = document.createElement("a");
+        fileLink.href = URL.createObjectURL(file);
+        fileLink.target = "_blank";
+        fileLink.innerText = `📎 ${file.name}`;
+        fileLink.style.color = "#fff";
+
+        fileMessage.appendChild(fileLink);
+    }
+
+    // Adicionar funcionalidade de toque longo para apagar
+    addDeleteFeature(fileMessage);
+
+    // Adicionar a mensagem ao chat
+    chatBox.appendChild(fileMessage);
+
+    // Rolar para a última mensagem
+    chatBox.scrollTop = chatBox.scrollHeight;
+});
+
+// Função para apagar mensagens ao pressionar por 8 segundos
+function addDeleteFeature(element) {
+    element.addEventListener("touchstart", function () {
+        touchTimer = setTimeout(() => {
+            replaceWithDeletedMessage(element);
+        }, 5000); // 5 segundos
+    });
+
+    element.addEventListener("touchend", function () {
+        clearTimeout(touchTimer);
+    });
+
+    element.addEventListener("mousedown", function () {
+        touchTimer = setTimeout(() => {
+            replaceWithDeletedMessage(element);
+        }, 5000); //  segundos
+    });
+
+    element.addEventListener("mouseup", function () {
+        clearTimeout(touchTimer);
+    });
+
+    element.addEventListener("mouseleave", function () {
+        clearTimeout(touchTimer);
+    });
+}
+
+// Função para substituir a mensagem por "Esta mensagem foi apagada."
+function replaceWithDeletedMessage(element) {
+    const deletedMessage = document.createElement("div");
+    deletedMessage.classList.add("message", "deleted-message");
+    deletedMessage.innerText = ".          Esta mensagem foi apagada.";
+
+    // Substitui a mensagem original pela mensagem de "apagada"
+    element.parentNode.replaceChild(deletedMessage, element);
+}
+
+// Enviar mensagem ao pressionar "Enter"
+function handleKeyPress(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
+
+// Gravação de áudio
+let mediaRecorder;
+let audioChunks = [];
+
+function toggleRecording(button) {
+    if (!mediaRecorder || mediaRecorder.state === "inactive") {
+        startRecording(button);
+    } else {
+        stopRecording(button);
+    }
+}
+
+function startRecording(button) {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.start();
+            audioChunks = [];
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            button.style.backgroundColor = "#ff4444"; // Indicador de gravação ativa
+        })
+        .catch(error => console.error("Erro ao acessar microfone:", error));
+}
+
+function stopRecording(button) {
+    mediaRecorder.stop();
+    mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunks, { type: "audio/mp3" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        const audioMessage = document.createElement("div");
+        audioMessage.classList.add("message", "user-message");
+
+        const audioElement = document.createElement("audio");
+        audioElement.src = audioUrl;
+        audioElement.controls = true;
+
+        audioMessage.appendChild(audioElement);
+        chatBox.appendChild(audioMessage);
+
+        // Adicionar funcionalidade de toque longo para apagar
+        addDeleteFeature(audioMessage);
+
+        // Rolar para a última mensagem
+        chatBox.scrollTop = chatBox.scrollHeight;
+    };
+
+    button.style.backgroundColor = ""; // Voltar ao normal
+}
+
+// Funções para botões (simples alertas, ajuste conforme necessário)
+function voltar() { alert("Voltando..."); }
+function menu() { alert("Abrindo menu..."); }
+function ligar() { alert("Iniciando chamada de voz..."); }
+function chamada() { alert("Iniciando chamada de vídeo..."); }
+
+// Função para substituir a mensagem por "Esta mensagem foi apagada."
+function replaceWithDeletedMessage(element, isUserMessage) {
+   const deletedMessage = document.createElement("div");
+   deletedMessage.classList.add("message", "deleted-message");
+   
+   // Mensagem de apagado
+//   deletedMessage.innerText = "ㅤㅤㅤㅤㅤㅤ o usuário apagou //mensagem  🤫.";
+   // Define a mensagem
+deletedMessage.innerText = "o usuário apagou mensagem.";
+
+// Salva o estilo original (posição anterior)
+const originalStyle = {
+   position: deletedMessage.style.position,
+   top: deletedMessage.style.top,
+   left: deletedMessage.style.left,
+   transform: deletedMessage.style.transform
+};
+
+// Estilo inicial centralizado com fundo e texto vermelho
+deletedMessage.style.position = "fixed";
+deletedMessage.style.top = "50%";
+deletedMessage.style.left = "50%";
+deletedMessage.style.transform = "translate(-50%, -50%)";
+deletedMessage.style.backgroundColor = "#2e2e2e";
+deletedMessage.style.color = "red"; // vermelho forte
+deletedMessage.style.fontStyle = "italic";
+deletedMessage.style.fontSize = "16px";
+deletedMessage.style.padding = "12px 20px";
+deletedMessage.style.borderRadius = "12px";
+deletedMessage.style.boxShadow = "0 4px 12px rgba(0,0,0,0.4)";
+deletedMessage.style.zIndex = "9999";
+deletedMessage.style.transition = "all 0.5s ease";
+
+// Após 5 segundos, remove fundo e volta ao lugar original
+setTimeout(() => {
+   deletedMessage.style.backgroundColor = "transparent";
+   deletedMessage.style.boxShadow = "none";
+   deletedMessage.style.color = "#8B0000"; // vermelho escuro
+   deletedMessage.style.position = originalStyle.position || "static";
+   deletedMessage.style.top = originalStyle.top || "";
+   deletedMessage.style.left = originalStyle.left || "";
+   deletedMessage.style.transform = originalStyle.transform || "";
+   deletedMessage.style.zIndex = "";
+}, 2000);
+
+// Após 20 segundos, remove completamente
+setTimeout(() => {
+   deletedMessage.style.opacity = "0";
+   deletedMessage.style.transition = "opacity 1s ease";
+   setTimeout(() => {
+      deletedMessage.remove();
+   }, 1000);
+}, 20000);
+   // Adicionar classe de posição conforme o autor da mensagem apagada
+   if (isUserMessage) {
+      deletedMessage.classList.add("user-deleted");
+   } else {
+      deletedMessage.classList.add("other-deleted");
+   }
+   
+   // Substitui a mensagem original pela mensagem de "apagada"
+   element.parentNode.replaceChild(deletedMessage, element);
+}
+
+// Função para adicionar a funcionalidade de apagar (com toque longo)
+function addDeleteFeature(element, isUserMessage) {
+   element.addEventListener("touchstart", function() {
+      touchTimer = setTimeout(() => {
+         replaceWithDeletedMessage(element, isUserMessage);
+      }, 5000); // 8 segundos
+   });
+   
+   element.addEventListener("touchend", function() {
+      clearTimeout(touchTimer);
+   });
+   
+   element.addEventListener("mousedown", function() {
+      touchTimer = setTimeout(() => {
+         replaceWithDeletedMessage(element, isUserMessage);
+      }, 5000); // 8 segundos
+   });
+   
+   element.addEventListener("mouseup", function() {
+      clearTimeout(touchTimer);
+   });
+   
+   element.addEventListener("mouseleave", function() {
+      clearTimeout(touchTimer);
+   });
+}
+
+// Função para enviar mensagens de texto (exemplo de como adicionar isUserMessage)
+function sendMessage() {
+   const messageText = messageInput.value.trim();
+   if (messageText === "") return;
+   
+   const messageElement = document.createElement("div");
+   messageElement.classList.add("message", "user-message");
+   messageElement.innerText = messageText;
+   
+   // Adiciona a função de apagar com o controle se foi do usuário ou outro
+   addDeleteFeature(messageElement, true); // true para mensagem do usuário atual
+   
+   chatBox.appendChild(messageElement);
+   messageInput.value = "";
+   chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Exemplo para mensagens do outro usuário (simulando)
+function simulateOtherUserMessage() {
+   const messageElement = document.createElement("div");
+   messageElement.classList.add("message", "other-message");
+   messageElement.innerText = "Mensagem do outro usuário";
+   
+   // Adiciona a função de apagar com o controle se foi do usuário ou outro
+   addDeleteFeature(messageElement, false); // false para mensagem do outro usuário
+   
+   chatBox.appendChild(messageElement);
+   chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// Variáveis para controle de inatividade e visibilidade da página
+let isPageVisible = true;
+let inactivityTimer = null;
+let lastVisibilityChange = Date.now();
+
+// Função para detectar mudança de visibilidade da página
+function monitorScreenCapture() {
+   // Detecta quando a aba da página perde foco (quando o usuário minimiza, muda a guia, etc.)
+   document.addEventListener("visibilitychange", function() {
+      if (document.hidden) {
+         // Armazena o tempo da última mudança de visibilidade
+         lastVisibilityChange = Date.now();
+         isPageVisible = false;
+      } else {
+         isPageVisible = true;
+         clearTimeout(inactivityTimer); // Limpa o timer de inatividade
+      }
+   });
+   
+   // Monitorar inatividade na página para garantir que o usuário tenha ficado por um tempo sem interagir
+   window.addEventListener("blur", handleInactivity);
+   window.addEventListener("focus", handleInactivity);
+}
+
+ 
+  </script>
+</body>
+</html> 
